@@ -17,8 +17,20 @@ export class TasksService {
 
     async index(filterTaskDto: FilterTaskDto): Promise<Task[]> {
         const { search, status } = filterTaskDto;
+        const query = this.taskRepository.createQueryBuilder('task');
 
-        return this.taskRepository.find();
+        if (status) {
+            query.andWhere('task.status = :status', { status });
+        }
+
+        if (search) {
+            query.andWhere(
+                'LOWER(task.title) LIKE :search OR LOWER(task.description) LIKE :search',
+                { search: `%${search.toLowerCase()}%` }
+            );
+        }
+
+        return await query.getMany();
     }
 
     async store(createTaskDto: CreateTaskDto): Promise<Task> {

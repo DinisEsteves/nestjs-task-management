@@ -11,7 +11,7 @@ export class TasksController {
     constructor(private tasksService: TasksService) { }
 
     @Get()
-    public index(@Param() filterTaskDto: FilterTaskDto): Promise<Task[]> {
+    public index(@Query() filterTaskDto: FilterTaskDto): Promise<Task[]> {
         return this.tasksService.index(filterTaskDto);
     }
 
