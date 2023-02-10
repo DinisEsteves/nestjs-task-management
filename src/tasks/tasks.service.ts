@@ -7,6 +7,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Task } from './task.entity';
 import { Repository } from 'typeorm';
 import { FindTaskDto } from './dto/find-task.dto';
+import { User } from 'src/auth/user.entity';
 
 @Injectable()
 export class TasksService {
@@ -33,13 +34,14 @@ export class TasksService {
         return await query.getMany();
     }
 
-    async store(createTaskDto: CreateTaskDto): Promise<Task> {
+    async store(createTaskDto: CreateTaskDto, user: User): Promise<Task> {
         const { title, description } = createTaskDto;
 
         const task = this.taskRepository.create({
             title,
             description,
             status: TaskStatus.OPEN,
+            user: user
         });
 
         return await this.taskRepository.save(task);
