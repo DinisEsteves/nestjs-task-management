@@ -14,8 +14,11 @@ import { User } from 'src/auth/user.entity';
 export class TasksController {
     constructor(private tasksService: TasksService) { }
     @Get()
-    public index(@Query() filterTaskDto: FilterTaskDto): Promise<Task[]> {
-        return this.tasksService.index(filterTaskDto);
+    public index(
+        @Query() filterTaskDto: FilterTaskDto,
+        @GetUser() user: User
+    ): Promise<Task[]> {
+        return this.tasksService.index(filterTaskDto, user);
     }
 
     @Post()
